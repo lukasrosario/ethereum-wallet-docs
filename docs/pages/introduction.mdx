@@ -1,0 +1,68 @@
+# Introduction
+
+This site is a reference for standard Ethereum wallet JSON-RPC methods, giving developers a consistent interface that any EIP-compliant wallet should implement.
+
+## What is an Ethereum wallet?
+
+An [Ethereum wallet](https://ethereum.org/en/wallets/) is an application that gives users control over their Ethereum account — it acts as both a gateway to the network and a tool for managing digital assets and identity. Wallets don’t store funds themselves; instead, they provide an interface for interacting with accounts on the blockchain.
+
+From a developer’s perspective, wallets expose three core functionalities through their RPC interface:
+
+### Authenticate Users
+
+Wallets handle identity and account management, allowing applications to:
+- Access account information such as onchain address and balance
+- Request user information such as contact & shipping information
+- Request permissions to sign messages and transactions on a user's behalf
+
+### Send Transactions
+
+Wallets handle the entire transaction lifecycle:
+- Validate and populate transaction parameters
+- Present human-readable details for user approval
+- Sign the transaction with the user’s private key
+- Broadcast the transaction to the network
+
+### Sign Messages
+
+Applications can request offchain signatures over arbitrary data:
+- Prove account ownership
+- Sign structured messages that can be relayed onchain to modify state
+- Create verifiable attestations
+
+## EIP-1193: Ethereum Provider JavaScript API
+
+[EIP-1193](https://eip.tools/eip/1193) defines a JavaScript API that Ethereum wallets expose to web applications. This standard ensures a consistent interface across wallet providers, allowing developers to write code that works with any compliant wallet.
+
+Unless otherwise stated, the documented methods refer to those submitted via the standard [EIP-1193](https://eip.tools/eip/1193) provider interface.
+
+### The Provider Interface
+
+Wallets expose an `ethereum` object in the browser’s global scope that implements the EIP-1193 interface. Its `request` method is the primary way to interact with the wallet:
+
+```javascript
+// Basic request
+const result = await window.ethereum.request({
+  method: 'eth_requestAccounts',
+  params: []
+});
+```
+
+All requests follow the same shape:
+
+1. **method** – a string identifying the RPC method
+2. **params** – an array of parameters required by the method
+3. **return value** – a Promise that resolves to the method’s response
+
+```javascript
+// Example: sending a transaction
+const txHash = await window.ethereum.request({
+  method: 'eth_sendTransaction',
+  params: [{
+    from: '0x…',
+    to: '0x…',
+    value: '0x…',
+    gas: '0x…'
+  }]
+});
+```
