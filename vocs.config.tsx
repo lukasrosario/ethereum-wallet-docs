@@ -28,7 +28,7 @@ export default defineConfig({
       collapsed: false,
       items: [
         {
-          text: "Authentication",
+          text: "Authenticate Users",
           items: [
             {
               text: "eth_requestAccounts",
